@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/select";
 
 import { Button } from "@/components/ui/button";
+import { useGetAllUsersQuery } from "@/redux/api/userApi";
+import Pagination from "@/components/ui/pagination";
 
 /* interface ActivityData {
   id: string;
@@ -37,7 +39,13 @@ import { Button } from "@/components/ui/button";
 } */
 
 const UserManagementAdmin = () => {
+      const [currentPage, setCurrentPage] = useState(1);
+
+  const limit = 10;
   const [selectedCategory, setSelectedCategory] = useState("all");
+
+  const {data:getAllUser} = useGetAllUsersQuery({page:currentPage, limit:limit});
+  console.log("userManagement",getAllUser);
 
   const handleCategoryChange = (value: string) => {
     setSelectedCategory(value);
@@ -151,6 +159,14 @@ const UserManagementAdmin = () => {
             </Table>
           </div>
         </div>
+      </div>
+        {/* pagination */}
+      <div className="flex justify-center items-center mt-14">
+        <Pagination
+          totalPage={getAllUser?.result?.totalPages || 1}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+        />
       </div>
     </section>
   );

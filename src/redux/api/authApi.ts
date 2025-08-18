@@ -3,16 +3,10 @@ import { baseApi } from "./baseApi";
 
 export const AuthApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    createUserByAdmin: builder.mutation({
-      query: (body) => ({
-        url: `/users/signup-verification`,
-        method: "POST",
-        body: body,
-      }),
-    }),
+   
     login: builder.mutation({
       query: ({ body }) => ({
-        url: `/admin/login`,
+        url: `/auth/admin-login`,
         method: "POST",
         body: body,
       }),
@@ -55,7 +49,7 @@ export const AuthApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useCreateUserByAdminMutation,
+ 
   useLoginMutation,
   useForgotPasswordMutation,
   useOtpUserMutation,

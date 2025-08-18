@@ -50,15 +50,14 @@ export default function Login() {
 
     try {
       const response = await login({ body }).unwrap();
+      console.log("login page",response);
+       console.log(response?.result?.accessToken);
       if (response.success) {
         toast.success(response.message);
         Cookies.set("token", response?.result?.accessToken);
-        Cookies.set("role", response.result?.adminInfo?.role);
         dispatch(setUser(response.result));
-        console.log(response);
+        console.log("login page",response);
         console.log(response?.result?.accessToken);
-        console.log(response.result.adminInfo.role);
-        console.log(response.result);
         route.push("/");
       }
     } catch (error) {

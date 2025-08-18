@@ -24,8 +24,7 @@ import {
 import { toast } from "sonner";
 import { ImageUploader } from "../ui/ImageUploader";
 import userImage from "@/assets/images/userImage.jpg";
-import { useSelector } from "react-redux";
-import { useAuth } from "@/redux/features/authSlice";
+import { useGetSingleUserQuery } from "@/redux/api/userApi";
 
 interface ProfileData {
   displayName: string;
@@ -40,9 +39,8 @@ interface ProfileData {
 
 const BasicSection = () => {
   const [active, setActive] = useState(false);
-  const authState = useSelector(useAuth);
-  console.log("to navbar", authState);
-  console.log("to navbar", authState?.adminInfo?.profileImage);
+  const { data: userProfile } = useGetSingleUserQuery({});
+
   const [profile, setProfile] = useState<ProfileData>({
     displayName: "",
     country: "",
@@ -155,7 +153,7 @@ const BasicSection = () => {
               </Label>
               <div className="relative w-24 h-24">
                 <Image
-                  src={profile.avatar || userImage}
+                  src={userProfile?.result?.profileImage || userImage}
                   height={150}
                   width={150}
                   alt="Profile"
@@ -185,7 +183,7 @@ const BasicSection = () => {
               id="displayName"
               type="text"
               value={profile.displayName}
-              placeholder={authState?.adminInfo?.adminName ?? undefined}
+              placeholder={userProfile?.result?.fullName ?? undefined}
               onChange={(e) =>
                 handleProfileChange("displayName", e.target.value)
               }
@@ -207,7 +205,7 @@ const BasicSection = () => {
               value={profile.email || ""}
               onChange={(e) => handleProfileChange("email", e.target.value)}
               className="mt-2 px-5 py-4"
-              placeholder={authState?.adminInfo?.email ?? "not found"}
+              placeholder={userProfile?.result?.email ?? "not found"}
               required
               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
               title="Please enter a valid email address (e.g., user@example.com)"
@@ -226,7 +224,7 @@ const BasicSection = () => {
               id="phoneNumber"
               type="tel"
               value={profile.phoneNumber}
-              placeholder={authState?.adminInfo?.phone ?? "not found"}
+              placeholder={"not found"}
               onChange={(e) =>
                 handleProfileChange("phoneNumber", e.target.value)
               }
@@ -248,9 +246,7 @@ const BasicSection = () => {
                 onValueChange={(value) => handleProfileChange("country", value)}
               >
                 <SelectTrigger className="mt-2 px-5 py-4 w-full">
-                  <SelectValue
-                    placeholder={authState?.adminInfo?.country ?? "not found"}
-                  />
+                  <SelectValue placeholder={"not found"} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Bangladesh">Bangladesh</SelectItem>
@@ -273,7 +269,7 @@ const BasicSection = () => {
               >
                 <SelectTrigger className="mt-2 px-5 py-4 w-full">
                   <SelectValue
-                    placeholder={authState?.adminInfo?.city ?? "not found"}
+                    placeholder={userProfile?.adminInfo?.city ?? "not found"}
                   />
                 </SelectTrigger>
                 <SelectContent>
@@ -299,7 +295,9 @@ const BasicSection = () => {
               >
                 <SelectTrigger className="mt-2 px-5 py-4 w-full">
                   <SelectValue
-                    placeholder={authState?.adminInfo?.province ?? "not found"}
+                    placeholder={
+                      userProfile?.adminInfo?.province ?? "not found"
+                    }
                   />
                 </SelectTrigger>
                 <SelectContent>
@@ -323,7 +321,7 @@ const BasicSection = () => {
               type="text"
               value={profile.bio}
               onChange={(e) => handleProfileChange("bio", e.target.value)}
-              placeholder={authState?.adminInfo?.bio ?? "not found"}
+              placeholder={userProfile?.adminInfo?.bio ?? "not found"}
               className="mt-2 px-5 py-4"
             />
           </div>

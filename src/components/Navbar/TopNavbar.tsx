@@ -14,8 +14,9 @@ import {
 import { formatChatDate } from "@/lib/formateTimeStamp";
 
 import userImage from "@/assets/images/userImage.jpg";
-import { useSelector } from "react-redux";
-import { useAuth } from "@/redux/features/authSlice";
+import { useGetSingleUserQuery } from "@/redux/api/userApi";
+/* import { useSelector } from "react-redux";
+import { useAuth } from "@/redux/features/authSlice"; */
 
 // import Link from "next/link";
 
@@ -36,16 +37,18 @@ type UpdateNotificationPayload = {
 };
 
 const TopNavbar = () => {
+  const {data: userProfile} = useGetSingleUserQuery({});
   const { data: notificationsData, refetch } = useGetMyNotificationsQuery({});
   const [updateNotification] = useUpdateNotificationMutation();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const notifications: NotificationType[] = notificationsData?.result || [];
-  const authState = useSelector(useAuth)
+ /*  const authState = useSelector(useAuth)
   console.log("to navbar",authState);
-  console.log("to navbar",authState?.adminInfo?.profileImage);
+  console.log("to navbar",authState?.adminInfo?.profileImage); */
 
   // const unreadCount = notifications.filter((n) => !n.isRead).length;
+  console.log("top navbar", userProfile);
 
   const handleMarkAsRead = async (id: string) => {
     const payload: UpdateNotificationPayload = {
@@ -91,7 +94,7 @@ const TopNavbar = () => {
           {/* Profile */}
           <div >
             <Image
-              src={authState?.adminInfo?.profileImage || userImage}
+              src={userProfile?.result?.profileImage ||  userImage}
               height={50}
               width={50}
               alt="avatar"

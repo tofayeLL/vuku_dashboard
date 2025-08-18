@@ -3,10 +3,10 @@ import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
-  const role = req.cookies.get("role")?.value;
+  // const role = req.cookies.get("role")?.value;
   const { pathname } = req.nextUrl;
 
-  console.log(role, token);
+  console.log( token);
 
   if (!token) {
     const destination = `/login?redirect=${encodeURIComponent(pathname)}`;
@@ -19,12 +19,9 @@ export function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     "/",
-    "/admin/admin_Management",
-    "/admin/staff_Management",
-    "/admin/responders_Management",
-    "/admin/cases",
-    "/admin/locations",
-    "/admin/training",
+    "/admin/user_Management",
+    "/admin/quiz_Management",
+    "/admin/subscription_Plan",
     "/message",
     "/settings",
   ],

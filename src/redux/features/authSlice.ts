@@ -39,7 +39,7 @@ const authSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       console.log(action);
-      state.role = action.payload.adminInfo.role;
+      // state.role = action.payload.adminInfo.role;
       state.token = action.payload.accessToken;
       state.adminInfo = action.payload.adminInfo;
     },
