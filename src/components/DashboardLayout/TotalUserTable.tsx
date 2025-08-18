@@ -2,10 +2,9 @@
 import React from "react";
 
 import { useState } from "react";
-import eye from "@/assets/eyeIcon.png";
-import deleteIcon from "@/assets/icons/Warden Management/Delete.png";
-import edit from "@/assets/icons/Warden Management/Edit Square.png";
+
 import { Button } from "@/components/ui/button";
+import userImage from "@/assets/User.png";
 import {
   Table,
   TableBody,
@@ -21,8 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
+
 
 interface ActivityData {
   id: string;
@@ -93,7 +92,7 @@ const RecentActivityTable = () => {
           {/* Header with filters */}
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-gray-900">
-              Recent Activity
+             Total User
             </h2>
             <div className="flex items-center gap-4">
               <Select
@@ -133,14 +132,12 @@ const RecentActivityTable = () => {
             <Table className="">
               <TableHeader className="bg-[#F8FAFC]">
                 <TableRow className="border-b">
-                  <TableHead className=" text-base font-semibold">Date</TableHead>
-                  <TableHead className=" text-base font-semibold">User</TableHead>
+                  <TableHead className=" text-base font-semibold">Name</TableHead>
+                  <TableHead className=" text-base font-semibold">Category</TableHead>
                   <TableHead className=" text-base font-semibold">
-                    Details
+                    Email
                   </TableHead>
-                  <TableHead className=" text-base font-semibold">
-                    Status
-                  </TableHead>
+               
                   <TableHead className=" text-base font-semibold">
                     Action
                   </TableHead>
@@ -149,65 +146,35 @@ const RecentActivityTable = () => {
               <TableBody>
                 {mockData.map((item) => (
                   <TableRow key={item.id} className="border-b last:border-b-0">
-                    <TableCell className="font-medium text-gray-900 py-3">
-                      {item.date}
+                   <TableCell className="font-medium text-gray-700 py-3 flex justify-start items-center gap-2">
+                    <span>
+                      <Image
+                        src={userImage}
+                        alt="image"
+                        width={40}
+                        height={40}
+                        className="rounded-sm object-cover w-10 h-10"
+                      />
+                    </span>{" "}
+                    Mia Johnson
+                  </TableCell>
+                    <TableCell className="text-gray-700 py-3">
+                     Beginer
                     </TableCell>
                     <TableCell className="text-gray-700 py-3">
-                      {item.user}
+                      michael.mitc@example.com
                     </TableCell>
-                    <TableCell className="text-gray-700 py-3">
-                      {item.details}
-                    </TableCell>
-                    <TableCell className="py-3">
-                      <Badge
-                        variant="secondary"
-                        className={`${item.status.color} border-0 font-medium py-2 w-[65%] `}
-                      >
-                        {item.status.label}
-                      </Badge>
-                    </TableCell>
+                  
                     <TableCell className="py-3">
                       <div className="flex gap-4">
-                        <button className="w-10 h-10 flex items-center justify-center rounded-lg">
-                          <div className="relative">
-                            <Image
-                              src={eye}
-                              alt="eye"
-                              height={50}
-                              width={50}
-                              className="object-cover w-6 h-6 object-center"
-                              priority
-                            />
-                          </div>
-                        </button>
+                      <Button
+                      variant="secondary"
+                      className="bg-[#E353141A] text-[#FAAD14] hover:text-[#FAAD141A] hover:bg-[#c03e061a] py-2 text-sm cursor-pointer"
+                    >
+                      View
+                    </Button>
 
-                        {/* edit button */}
-                        <button className="w-10 h-10 flex items-center justify-center rounded-lg">
-                          <div className="relative">
-                            <Image
-                              src={edit}
-                              alt="edit"
-                              height={50}
-                              width={50}
-                              className="object-cover w-6 h-6 object-center"
-                              priority
-                            />
-                          </div>
-                        </button>
-
-                        {/* delete button */}
-                        <button className="w-10 h-10 flex items-center justify-center rounded-lg">
-                          <div className="relative">
-                            <Image
-                              src={deleteIcon}
-                              alt="delete"
-                              height={50}
-                              width={50}
-                              className="object-cover w-6 h-6 object-center"
-                              priority
-                            />
-                          </div>
-                        </button>
+                     
                       </div>
                     </TableCell>
                   </TableRow>

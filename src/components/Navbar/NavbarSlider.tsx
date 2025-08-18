@@ -8,6 +8,7 @@ import { RiLogoutCircleRLine } from "react-icons/ri";
 import { FiMenu } from "react-icons/fi";
 import Cookies from "js-cookie";
 import logo from "@/assets/logo.png";
+import logo2 from "@/assets/logo2.png";
 import { RxDashboard } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, useAuth } from "@/redux/features/authSlice";
@@ -35,7 +36,7 @@ const NavbarSlider = ({ isOpen, toggleSidebar }: SidebarProps) => {
     { label: "Dashboard", route: "/", iconPath: <RxDashboard /> },
 
     // Only show Admin Management for SUPER_ADMIN
-    ...(auth?.role === "SUPER_ADMIN" 
+    ...(auth?.role === "SUPER_ADMIN"
       ? [
           {
             label: "Admin Management",
@@ -110,13 +111,24 @@ const NavbarSlider = ({ isOpen, toggleSidebar }: SidebarProps) => {
         <div className="flex flex-col h-full">
           {/* Logo */}
           {isOpen && (
-            <Link href="/" className="hidden lg:flex justify-start p-6">
+            <Link
+              href="/"
+              className="hidden lg:flex justify-start p-6 items-center gap-2"
+            >
               <Image
-                width={250}
-                height={250}
+                width={256}
+                height={256}
                 className="w-14 h-14"
                 src={logo}
-                alt="logo_image"
+                alt="Company logo"
+                priority
+              />
+              <Image
+                src={logo2}
+                width={100}
+                height={40}
+                alt="Secondary logo"
+                className="w-auto h-8"
                 priority
               />
             </Link>
@@ -129,10 +141,10 @@ const NavbarSlider = ({ isOpen, toggleSidebar }: SidebarProps) => {
                 <li key={item?.route}>
                   <Link
                     href={item?.route}
-                    className={`flex items-center gap-2 px-4 py-2 mb-2 rounded-lg hover:bg-[#00A8CC] hover:text-white transition-colors duration-300 ease-in-out 
+                    className={`flex items-center gap-2 px-4 py-2 mb-2 rounded-lg hover:bg-[#54BB52] hover:text-white transition-colors duration-300 ease-in-out 
                     ${
                       path === item?.route
-                        ? "bg-[#00A8CC] text-white"
+                        ? "bg-[#54BB52] text-white"
                         : "text-[#817F9B]"
                     }`}
                   >

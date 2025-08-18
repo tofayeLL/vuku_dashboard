@@ -11,7 +11,10 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import { Card, CardContent, CardHeader/* , CardTitle */ } from "@/components/ui/card";
+import { Card, CardContent, CardHeader,/* , CardTitle */ 
+CardTitle} from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { useState } from "react";
 /* import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react"; */
@@ -41,14 +44,14 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div className="border border-gray-200 rounded-lg p-3 space-y-1 shadow-lg bg-white z-50 max-w-[200px]">
+      <div className="border border-gray-200 rounded-lg p-3 space-y-1 shadow-lg bg-white z-50 max-w-[300px]">
         <p className="text-gray-700 font-medium">{`${label} 2025`}</p>
         <p className="text-gray-700">
           {data.activity.toLocaleString()} {/* Show actual value with commas */}
         </p>
         {data.isHighlighted && (
           <p className="text-gray-700 font-medium">
-            Total Growth <span className="ml-6">+67%</span>
+            Total Payment <span className="ml-4">+67%</span>
           </p>
         )}
       </div>
@@ -58,29 +61,36 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export default function CasesReportChart() {
+  const [selectedCategory, setSelectedCategory] = useState("Monthly");
 
-  // const [timeFilter] = useState("Monthly");
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value);
+    // Add filtering logic here based on your needs
+  };
 
   return (
     <Card className="w-full bg-[#FFF] flex flex-col justify-end item-end rounded-2xl">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0">
-     {/*    <CardTitle className="text-xl md:text-2xl font-semibold">
+       <CardHeader className="flex flex-row items-center justify-between space-y-0">
+        <CardTitle className="text-xl md:text-2xl font-semibold">
           Activity Team
         </CardTitle>
         <div className="hidden md:flex items-center gap-6">
-         <div className="flex justify-center items-center gap-2">
-          <p className="bg-[#12AEC5] h-4 w-4 rounded"></p>
-          <h1>Revenue</h1>
-         </div>
-          <Button
-            variant="outline"
-            size="default"
-            className="text-base font-medium text-[#4A4A4A] bg-white rounded-xl hover:bg-gray-50 border-gray-200 py-3"
-          >
-            {timeFilter}
-            <ChevronDown className="ml-1 h-4 w-3" />
-          </Button>
-        </div> */}
+          <div className="flex justify-center items-center gap-2">
+            <p className="bg-[#54BB52] h-4 w-4 rounded"></p>
+            <h1>Payment</h1>
+          </div>
+          <Select value={selectedCategory} onValueChange={handleCategoryChange}>
+            <SelectTrigger className="">
+              <SelectValue placeholder="Monthly" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Monthly">Monthly</SelectItem>
+              <SelectItem value="Daily">Daily</SelectItem>
+              <SelectItem value="Weekly">Weekly</SelectItem>
+              <SelectItem value="Yearly">Yearly</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </CardHeader>
 
       <CardContent>
@@ -120,7 +130,7 @@ export default function CasesReportChart() {
                 {chartData.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={entry.isHighlighted ? "#0891B2" : "#C4EFF8"}
+                    fill={entry.isHighlighted ? "#54BB52" : "#54BB5266"}
                     style={{ cursor: "pointer" }}
                   />
                 ))}

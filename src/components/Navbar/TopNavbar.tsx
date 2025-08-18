@@ -12,7 +12,7 @@ import {
   useUpdateNotificationMutation,
 } from "@/redux/api/notifiyApi";
 import { formatChatDate } from "@/lib/formateTimeStamp";
-import icon from "@/assets/icons/navbar Top.png";
+
 import userImage from "@/assets/images/userImage.jpg";
 import { useSelector } from "react-redux";
 import { useAuth } from "@/redux/features/authSlice";
@@ -64,14 +64,7 @@ const TopNavbar = () => {
   return (
     <>
       <div className="bg-white flex justify-between items-center gap-2 font-bold w-full h-[81px] px-4 md:px-6 py-4 sticky top-0 z-40  ">
-        <h1 className="md:text-2xl flex justify-center items-center gap-5"><span><Image
-              src={icon}
-              height={50}
-              width={50}
-              alt="avatar"
-              className="rounded-full w-5 h-5"
-              priority
-            /></span>Overview</h1>
+        <h1 className="md:text-3xl flex justify-center items-center gap-5">Overview</h1>
 
         <div className="flex justify-end items-center gap-6">
             {/* message Icon */}
