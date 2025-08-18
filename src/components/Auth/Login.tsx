@@ -22,7 +22,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store/store";
 import { setUser } from "@/redux/features/authSlice";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+// import Link from "next/link";
 
 const customIcon = (
   <LoadingOutlined style={{ fontSize: 24, color: "#fff" }} spin />
@@ -200,14 +200,14 @@ export default function Login() {
                     Remember me
                   </Label>
                 </div>
-                <Link href="/forgot-password">
+              {/*   <Link href="/forgot-password">
                   <button
                     type="button"
                     className="text-[#FB5833] hover:underline font-normal"
                   >
                     Forgot Password
                   </button>
-                </Link>
+                </Link> */}
               </div>
 
               {/* Login Button */}
