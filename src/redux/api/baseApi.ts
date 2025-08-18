@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store/store";
 
 // const baseUrl = "http://localhost:4013/api/v1";
-const baseUrl = "https://poojithatanjore-backend.vercel.app/api/v1";
+const baseUrl = "http://10.0.20.16:5010/api/v1";
 
 export const baseApi = createApi({
   reducerPath: "api",

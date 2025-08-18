@@ -136,6 +136,12 @@
   }
 }
 
+.MuiInputBase-root{
+  border-radius: 100px !important;
+  padding-left: 10px;
+  padding-right: 10px;
+  
+}
 
 /* .bg-black\/50 {
     background-color: color-mix(in srgb, #0000002d 5%, transparent) !important;

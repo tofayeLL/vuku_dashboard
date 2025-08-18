@@ -152,13 +152,13 @@ export default function Login() {
                     autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="h-12 px-4 border  rounded-full focus:border-[#54BB52] focus:ring-[#54BB52] w-full bg-none mt-2 "
+                    className="h-12  border  rounded-full focus:border-[#54BB52] focus:ring-[#54BB52] w-full bg-none mt-2 "
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -213,7 +213,7 @@ export default function Login() {
               {/* Login Button */}
               <Button
                 type="submit"
-                className="w-full h-12 bg-[#54BB52] hover:bg-[#54BB52] text-white font-bold rounded-lg transition-colors"
+                className="w-full h-12 text-base bg-[#54BB52] hover:bg-[#54BB52] text-white font-bold rounded-lg transition-colors"
               >
                 {isLoading ? (
                   <>
