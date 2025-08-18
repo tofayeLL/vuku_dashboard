@@ -1,10 +1,10 @@
-import RespondersManagement from '@/components/Admin/RespondersManagement/RespondersManagement';
+import SubscriptionPlan from '@/components/Admin/SubscriptionPlan/SubscriptionPlan';
 import React from 'react';
 
 const page = () => {
     return (
         <div>
-           <RespondersManagement />
+            <SubscriptionPlan></SubscriptionPlan>
             
         </div>
     );

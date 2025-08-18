@@ -16,9 +16,7 @@ import { logout } from "@/redux/features/authSlice";
 import { IoSettingsOutline } from "react-icons/io5";
 // import { PiBookOpenFill } from "react-icons/pi";
 import { BsPeople } from "react-icons/bs";
-import { FaBriefcase } from "react-icons/fa6";
-// import { LuMessageCircleMore } from "react-icons/lu";
-import { HiOutlineOfficeBuilding } from "react-icons/hi";
+
 
 // Sidebar Props
 interface SidebarProps {
@@ -55,22 +53,12 @@ const NavbarSlider = ({ isOpen, toggleSidebar }: SidebarProps) => {
       route: "/admin/quiz_Management",
       iconPath: <BsPeople className="h-5 w-5" />,
     },
-    {
-      label: "Staff Management",
-      route: "/admin/staff_Management",
+       {
+      label: "Subscription Plan",
+      route: "/admin/subscription_Plan",
       iconPath: <BsPeople className="h-5 w-5" />,
     },
-    {
-      label: "Responders Management",
-      route: "/admin/responders_Management",
-      iconPath: <HiOutlineOfficeBuilding className="w-5 h-5" />,
-    },
-
-    {
-      label: "Cases",
-      route: "/admin/cases",
-      iconPath: <FaBriefcase className="w-5 h-5" />,
-    },
+    
 
     /*   {
       label: "Location",

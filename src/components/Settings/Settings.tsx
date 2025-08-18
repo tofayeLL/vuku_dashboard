@@ -30,7 +30,7 @@ export default function Settings() {
                                 <button
                                     key={item.id}
                                     onClick={() => setActiveSection(item.id)}
-                                    className={`w-full flex items-center justify-between px-4 py-3 text-left rounded-lg transition-colors ${activeSection === item.id ? "bg-cyan-500 text-white" : "text-gray-700 hover:bg-gray-100"
+                                    className={`w-full flex items-center justify-between px-4 py-3 text-left rounded-lg transition-colors ${activeSection === item.id ? "bg-[#54BB52] text-white" : "text-gray-700 hover:bg-gray-100"
                                         }`}
                                 >
                                     <span className="font-medium">{item.label}</span>
