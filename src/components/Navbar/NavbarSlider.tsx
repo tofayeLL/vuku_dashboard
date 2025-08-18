@@ -10,9 +10,9 @@ import Cookies from "js-cookie";
 import logo from "@/assets/logo.png";
 import logo2 from "@/assets/logo2.png";
 import { RxDashboard } from "react-icons/rx";
-import { useDispatch, useSelector } from "react-redux";
-import { logout, useAuth } from "@/redux/features/authSlice";
-import { CiUser } from "react-icons/ci";
+import { useDispatch } from "react-redux";
+import { logout } from "@/redux/features/authSlice";
+// import { CiUser } from "react-icons/ci";
 import { IoSettingsOutline } from "react-icons/io5";
 // import { PiBookOpenFill } from "react-icons/pi";
 import { BsPeople } from "react-icons/bs";
@@ -27,7 +27,7 @@ interface SidebarProps {
 }
 
 const NavbarSlider = ({ isOpen, toggleSidebar }: SidebarProps) => {
-  const auth = useSelector(useAuth);
+  // const auth = useSelector(useAuth);
   const path = usePathname();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -36,7 +36,7 @@ const NavbarSlider = ({ isOpen, toggleSidebar }: SidebarProps) => {
     { label: "Dashboard", route: "/", iconPath: <RxDashboard /> },
 
     // Only show Admin Management for SUPER_ADMIN
-    ...(auth?.role === "SUPER_ADMIN"
+  /*   ...(auth?.role === "SUPER_ADMIN"
       ? [
           {
             label: "Admin Management",
@@ -44,7 +44,17 @@ const NavbarSlider = ({ isOpen, toggleSidebar }: SidebarProps) => {
             iconPath: <CiUser className="h-5 w-5" />,
           },
         ]
-      : []),
+      : []), */
+       {
+      label: "User Management",
+      route: "/admin/user_Management",
+      iconPath: <BsPeople className="h-5 w-5" />,
+    },
+       {
+      label: "Quiz Management",
+      route: "/admin/quiz_Management",
+      iconPath: <BsPeople className="h-5 w-5" />,
+    },
     {
       label: "Staff Management",
       route: "/admin/staff_Management",
