@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { useDropzone } from "react-dropzone";
 import { Button } from "./button";
 import { toast } from "sonner";
-import { useUpdateMyProfileMutation } from "@/redux/api/settingsApi";
+import { useUpdateMyProfileImageMutation } from "@/redux/api/settingsApi";
 
 export function ImageUploader() {
   const [show, setShow] = useState(true)
@@ -15,7 +15,7 @@ export function ImageUploader() {
   const [previews, setPreviews] = useState<string[]>([]);
   const [uploadedUrls, setUploadedUrls] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [uploadImage, { isLoading }] = useUpdateMyProfileMutation();
+  const [uploadImage, { isLoading }] = useUpdateMyProfileImageMutation();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length) {

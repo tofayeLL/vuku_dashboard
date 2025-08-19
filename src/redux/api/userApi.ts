@@ -16,7 +16,7 @@ export const userApi = baseApi.injectEndpoints({
         url: "/auth/profile",
         method: "GET",
       }),
-      providesTags: ["users"],
+      providesTags: ["profile"],
     }),
    
    

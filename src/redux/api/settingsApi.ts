@@ -16,8 +16,20 @@ export const settingsApi = baseApi.injectEndpoints({
                 body: body
             }),
             invalidatesTags: ['profile']
+        }),
+         updateMyProfileImage: builder.mutation({
+            query: (body) => ({
+                url: `/auth/update-profile-image`,
+                method: 'PATCH',
+                body: body
+            }),
+            invalidatesTags: ['profile']
         })
+
     }),
+       
+   
+    
 })
 
-export const { useGetMyProfileQuery, useUpdateMyProfileMutation } = settingsApi;
+export const { useGetMyProfileQuery, useUpdateMyProfileMutation,useUpdateMyProfileImageMutation  } = settingsApi;

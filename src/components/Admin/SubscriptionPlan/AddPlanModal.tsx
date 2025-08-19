@@ -20,28 +20,34 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useCreatePlanMutation } from "@/redux/api/planApi";
 
 interface AddPlanModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
 interface FormData {
   planName: string;
-  pricePerMonth: string;
-  duration: string;
+  price: string;
+  interval: string;
+  intervalCount: string;
   ideal: string;
-  bookAccess: string;
+  accessBooks: string;
   features: string[];
 }
 
 const AddPlanModal = ({ isOpen, onClose }: AddPlanModalProps) => {
+  const [createPlan] = useCreatePlanMutation();
+
   const [formData, setFormData] = useState<FormData>({
-    planName: "subscription",
-    pricePerMonth: "4.99",
-    duration: "1 month",
-    ideal: "Light users",
-    bookAccess: "20-25",
-    features: ["All core features, quizzes, gamification."],
+    planName: "",
+    price: "",
+    interval: "",
+    intervalCount: "",
+    ideal: "",
+    accessBooks: "",
+    features: [""],
   });
 
   const handleInputChange = (field: keyof FormData, value: string) => {
@@ -67,9 +73,42 @@ const AddPlanModal = ({ isOpen, onClose }: AddPlanModalProps) => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+
+    // Transform data to match backend structure
+    const planData = {
+      planName: formData.planName,
+      price: parseFloat(formData.price),
+      interval: formData.interval,
+      intervalCount: parseInt(formData.intervalCount),
+      ideal: formData.ideal,
+      accessBooks: formData.accessBooks,
+      features: formData.features
+        .filter((feature) => feature.trim() !== "")
+        .flatMap((feature) =>
+          feature
+            .split(",")
+            .map((f) => f.trim())
+            .filter((f) => f !== "")
+        ),
+    };
+
+    console.log("Form submitted (backend format):", planData);
+    // Here you would send backendData to your API
+
+    const res = await createPlan(planData).unwrap();
+    console.log("create  plan", res);
+    // Reset form after successful submission
+    setFormData({
+      planName: "",
+      price: "",
+      interval: "",
+      intervalCount: "",
+      ideal: "",
+      accessBooks: "",
+      features: [""],
+    });
   };
 
   const handleCancel = () => {
@@ -111,61 +150,77 @@ const AddPlanModal = ({ isOpen, onClose }: AddPlanModalProps) => {
                 />
               </div>
 
-              {/* Price Per Month */}
+              {/* Price */}
               <div className="space-y-2">
                 <Label
-                  htmlFor="pricePerMonth"
+                  htmlFor="price"
                   className="text-sm font-medium text-muted-foreground"
                 >
-                  Price Per Month*
+                  Price*
                 </Label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                     $
                   </span>
                   <Input
-                    id="pricePerMonth"
+                    id="price"
                     type="number"
-                    placeholder="Price Per Month"
+                    placeholder="Price"
                     step="0.01"
-                    value={formData.pricePerMonth}
-                    onChange={(e) =>
-                      handleInputChange("pricePerMonth", e.target.value)
-                    }
+                    value={formData.price}
+                    onChange={(e) => handleInputChange("price", e.target.value)}
                     className="pl-8"
                     required
                   />
                 </div>
               </div>
 
-              {/* Duration */}
+              {/* Interval */}
               <div className="space-y-2 w-full">
-                {" "}
-                {/* Add w-full here */}
                 <Label
-                  htmlFor="duration"
+                  htmlFor="interval"
                   className="text-sm font-medium text-muted-foreground"
                 >
-                  Duration*
+                  Interval*
                 </Label>
                 <Select
-                  value={formData.duration}
+                  value={formData.interval}
                   onValueChange={(value) =>
-                    handleInputChange("duration", value)
+                    handleInputChange("interval", value)
                   }
                 >
                   <SelectTrigger className="w-full">
-                    {" "}
-                    {/* Add w-full here */}
-                    <SelectValue placeholder="Select duration" />
+                    <SelectValue placeholder="Select interval" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1 month">1 month</SelectItem>
-                    <SelectItem value="3 months">3 months</SelectItem>
-                    <SelectItem value="6 months">6 months</SelectItem>
-                    <SelectItem value="12 months">12 months</SelectItem>
+                    <SelectItem value="day">Day</SelectItem>
+                    <SelectItem value="week">Week</SelectItem>
+                    <SelectItem value="month">Month</SelectItem>
+                    <SelectItem value="year">Year</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              {/* Interval Count */}
+              <div className="space-y-2">
+                <Label
+                  htmlFor="intervalCount"
+                  className="text-sm font-medium text-muted-foreground"
+                >
+                  Interval Count*
+                </Label>
+                <Input
+                  id="intervalCount"
+                  type="number"
+                  placeholder="Interval Count (e.g., 1, 3, 6)"
+                  min="1"
+                  value={formData.intervalCount}
+                  onChange={(e) =>
+                    handleInputChange("intervalCount", e.target.value)
+                  }
+                  className="w-full"
+                  required
+                />
               </div>
 
               {/* Ideal */}
@@ -194,20 +249,20 @@ const AddPlanModal = ({ isOpen, onClose }: AddPlanModalProps) => {
                 </Select>
               </div>
 
-              {/* Book Access */}
+              {/* Access Books */}
               <div className="space-y-2">
                 <Label
-                  htmlFor="bookAccess"
+                  htmlFor="accessBooks"
                   className="text-sm font-medium text-muted-foreground"
                 >
-                  Book Access*
+                  Access Books*
                 </Label>
                 <Input
-                  id="bookAccess"
-                  value={formData.bookAccess}
-                  placeholder="Book Access"
+                  id="accessBooks"
+                  value={formData.accessBooks}
+                  placeholder="Book Access (e.g., All available books, 20-25)"
                   onChange={(e) =>
-                    handleInputChange("bookAccess", e.target.value)
+                    handleInputChange("accessBooks", e.target.value)
                   }
                   className="w-full"
                   required
