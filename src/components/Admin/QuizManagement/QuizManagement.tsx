@@ -43,7 +43,7 @@ const QuizManagement = () => {
       <div className="mt-5 grid lg:grid-cols-3 grid-cols-1 gap-6">
         {
           allQuizzes?.result?.map((item:any)=>(
-            <Card key={item.id} className="w-full max-w-sm cursor-pointer bg-white transition-all duration-200 hover:shadow-md hover:bg-gray-50/50  shadow-sm">
+            <Card key={item.id} className="w-full cursor-pointer bg-white transition-all duration-200 hover:shadow-md hover:bg-gray-50/50  shadow-sm">
           <CardContent className="p-2">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-medium  text-black text-lg leading-tight">

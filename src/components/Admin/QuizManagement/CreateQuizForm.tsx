@@ -8,7 +8,11 @@ import { useState, useRef, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus } from "lucide-react";
-import { useCreateQuizMutation, useGetSingleBookQuery } from "@/redux/api/quizApi";
+import {
+  useCreateQuizMutation,
+  useGetSingleBookQuery,
+} from "@/redux/api/quizApi";
+import { toast } from "sonner";
 
 interface BookResult {
   nid: number;
@@ -43,7 +47,7 @@ const CreateQuizPage = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const [createQuiz] = useCreateQuizMutation()
+  const [createQuiz] = useCreateQuizMutation();
 
   // Debounce implementation
   useEffect(() => {
@@ -83,7 +87,9 @@ const CreateQuizPage = () => {
     correctAnswers: [],
   });
 
-  const [additionalForms, setAdditionalForms] = useState<QuestionFormData[]>([]);
+  const [additionalForms, setAdditionalForms] = useState<QuestionFormData[]>(
+    []
+  );
 
   // Handle click outside to close dropdown
   useEffect(() => {
@@ -120,17 +126,25 @@ const CreateQuizPage = () => {
   };
 
   // Helper function to get the actual answer text based on option letter
-  const getAnswerValue = (option: string, formData: QuizFormData | QuestionFormData): string => {
+  const getAnswerValue = (
+    option: string,
+    formData: QuizFormData | QuestionFormData
+  ): string => {
     switch (option) {
-      case 'A': return formData.questionAnswerA;
-      case 'B': return formData.questionAnswerB;
-      case 'C': return formData.questionAnswerC;
-      case 'D': return formData.questionAnswerD;
-      default: return '';
+      case "A":
+        return formData.questionAnswerA;
+      case "B":
+        return formData.questionAnswerB;
+      case "C":
+        return formData.questionAnswerC;
+      case "D":
+        return formData.questionAnswerD;
+      default:
+        return "";
     }
   };
 
-  const handleSubmit = async(e: React.FormEvent) => {
+  /*  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.bookId) {
       alert("Please select a book from the dropdown");
@@ -181,9 +195,94 @@ const CreateQuizPage = () => {
     // Here you would typically send submissionData to your backend
     const res = await createQuiz(submissionData).unwrap();
     console.log("submit quiz",res);
-  };
+  }; */
 
-  const handleInputChange = (field: keyof Omit<QuizFormData, 'bookName' | 'bookId'>, value: string | string[]) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.bookId) {
+      alert("Please select a book from the dropdown");
+      return;
+    }
+
+    try {
+      // Prepare main question - convert option letters to actual answer values
+      const mainQuestion = {
+        content: formData.content,
+        options: [
+          formData.questionAnswerA,
+          formData.questionAnswerB,
+          formData.questionAnswerC,
+          formData.questionAnswerD,
+        ].filter((option) => option.trim() !== ""), // Filter out empty options
+        correctAnswers: formData.correctAnswers
+          .map((option) => getAnswerValue(option, formData))
+          .filter((ans) => ans.trim() !== ""),
+      };
+
+      // Prepare additional questions - convert option letters to actual answer values
+      const additionalQuestions = additionalForms.map((form) => ({
+        content: form.content,
+        options: [
+          form.questionAnswerA,
+          form.questionAnswerB,
+          form.questionAnswerC,
+          form.questionAnswerD,
+        ].filter((option) => option.trim() !== ""),
+        correctAnswers: form.correctAnswers
+          .map((option) => getAnswerValue(option, form))
+          .filter((ans) => ans.trim() !== ""),
+      }));
+
+      // Combine all questions with auto-generated numbers
+      const allQuestions = [mainQuestion, ...additionalQuestions].map(
+        (q, i) => ({
+          questionNo: i + 1, // Auto-generated question number starting from 1
+          ...q,
+        })
+      );
+
+      const submissionData = {
+        bookId: formData.bookId,
+        bookName: formData.bookName,
+        questions: allQuestions,
+      };
+
+      console.log("Form Data:", submissionData);
+
+      const res = await createQuiz(submissionData).unwrap();
+      console.log("submit quiz", res);
+
+      // Show success toast
+      toast.success("Quiz submitted successfully!");
+
+      // Reset form after successful submission
+      setFormData({
+        bookName: "",
+        bookId: null,
+        content: "",
+        questionAnswerA: "",
+        questionAnswerB: "",
+        questionAnswerC: "",
+        questionAnswerD: "",
+        correctAnswers: [],
+      });
+      setAdditionalForms([]);
+      setSearchQuery("");
+    } catch (error: any) {
+      console.error("Error creating quiz:", error);
+
+      // Show error toast with specific message if available
+      const errorMessage =
+        error?.data?.message ||
+        error?.message ||
+        "Failed to create quiz. Please try again.";
+      toast.error(errorMessage);
+    }
+  };
+  const handleInputChange = (
+    field: keyof Omit<QuizFormData, "bookName" | "bookId">,
+    value: string | string[]
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -196,9 +295,7 @@ const CreateQuizPage = () => {
     value: string | string[]
   ) => {
     setAdditionalForms((prev) =>
-      prev.map((form, i) =>
-        i === index ? { ...form, [field]: value } : form
-      )
+      prev.map((form, i) => (i === index ? { ...form, [field]: value } : form))
     );
   };
 
@@ -221,34 +318,40 @@ const CreateQuizPage = () => {
   };
 
   const handleCorrectAnswerChange = (value: string, isChecked: boolean) => {
-    setFormData(prev => {
+    setFormData((prev) => {
       if (isChecked) {
         return {
           ...prev,
-          correctAnswers: [...prev.correctAnswers, value]
+          correctAnswers: [...prev.correctAnswers, value],
         };
       } else {
         return {
           ...prev,
-          correctAnswers: prev.correctAnswers.filter(ans => ans !== value)
+          correctAnswers: prev.correctAnswers.filter((ans) => ans !== value),
         };
       }
     });
   };
 
-  const handleAdditionalCorrectAnswerChange = (index: number, value: string, isChecked: boolean) => {
-    setAdditionalForms(prev =>
+  const handleAdditionalCorrectAnswerChange = (
+    index: number,
+    value: string,
+    isChecked: boolean
+  ) => {
+    setAdditionalForms((prev) =>
       prev.map((form, i) => {
         if (i === index) {
           if (isChecked) {
             return {
               ...form,
-              correctAnswers: [...form.correctAnswers, value]
+              correctAnswers: [...form.correctAnswers, value],
             };
           } else {
             return {
               ...form,
-              correctAnswers: form.correctAnswers.filter(ans => ans !== value)
+              correctAnswers: form.correctAnswers.filter(
+                (ans) => ans !== value
+              ),
             };
           }
         }
@@ -265,7 +368,10 @@ const CreateQuizPage = () => {
       <CardContent>
         {/* Book Name with Dropdown */}
         <div className="space-y-2 relative" ref={dropdownRef}>
-          <Label htmlFor="bookName" className="text-sm font-medium text-gray-700">
+          <Label
+            htmlFor="bookName"
+            className="text-sm font-medium text-gray-700"
+          >
             Book Name*
           </Label>
           <Input
@@ -282,7 +388,9 @@ const CreateQuizPage = () => {
           {showDropdown && (
             <div className="absolute z-10 mt-1 w-full bg-white shadow-lg rounded-md py-1 max-h-60 overflow-auto border border-gray-200">
               {isLoading ? (
-                <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
+                <div className="px-4 py-2 text-sm text-gray-500">
+                  Loading...
+                </div>
               ) : bookResults?.result?.length > 0 ? (
                 bookResults.result
                   .filter((book: BookResult) => typeof book === "object")
@@ -310,7 +418,10 @@ const CreateQuizPage = () => {
         <form onSubmit={handleSubmit} className="space-y-6 mt-6">
           {/* Question Content */}
           <div className="space-y-2">
-            <Label htmlFor="content" className="text-sm font-medium text-gray-700">
+            <Label
+              htmlFor="content"
+              className="text-sm font-medium text-gray-700"
+            >
               Question 1*
             </Label>
             <Textarea
@@ -325,7 +436,7 @@ const CreateQuizPage = () => {
 
           {/* Answer Options */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {['A', 'B', 'C', 'D'].map((option) => (
+            {["A", "B", "C", "D"].map((option) => (
               <div className="space-y-2" key={option}>
                 <Label className="text-sm font-medium text-gray-700">
                   Option {option}*
@@ -333,9 +444,19 @@ const CreateQuizPage = () => {
                 <Input
                   type="text"
                   placeholder={`Option ${option}`}
-                  value={formData[`questionAnswer${option}` as keyof QuizFormData] as string}
-                  onChange={(e) => 
-                    handleInputChange(`questionAnswer${option}` as keyof Omit<QuizFormData, 'bookName' | 'bookId'>, e.target.value)
+                  value={
+                    formData[
+                      `questionAnswer${option}` as keyof QuizFormData
+                    ] as string
+                  }
+                  onChange={(e) =>
+                    handleInputChange(
+                      `questionAnswer${option}` as keyof Omit<
+                        QuizFormData,
+                        "bookName" | "bookId"
+                      >,
+                      e.target.value
+                    )
                   }
                   className="w-full"
                   required
@@ -345,7 +466,7 @@ const CreateQuizPage = () => {
                     type="checkbox"
                     id={`correct-${option}`}
                     checked={formData.correctAnswers.includes(option)}
-                    onChange={(e) => 
+                    onChange={(e) =>
                       handleCorrectAnswerChange(option, e.target.checked)
                     }
                     className="mr-2"
@@ -389,7 +510,7 @@ const CreateQuizPage = () => {
 
               {/* Answer Options */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                {['A', 'B', 'C', 'D'].map((option) => (
+                {["A", "B", "C", "D"].map((option) => (
                   <div className="space-y-2" key={option}>
                     <Label className="text-sm font-medium text-gray-700">
                       Option {option}*
@@ -397,7 +518,11 @@ const CreateQuizPage = () => {
                     <Input
                       type="text"
                       placeholder={`Option ${option}`}
-                      value={form[`questionAnswer${option}` as keyof QuestionFormData] as string}
+                      value={
+                        form[
+                          `questionAnswer${option}` as keyof QuestionFormData
+                        ] as string
+                      }
                       onChange={(e) =>
                         handleAdditionalFormChange(
                           index,
@@ -422,7 +547,9 @@ const CreateQuizPage = () => {
                         }
                         className="mr-2"
                       />
-                      <Label htmlFor={`correct-${index}-${option}`}>Correct Answer</Label>
+                      <Label htmlFor={`correct-${index}-${option}`}>
+                        Correct Answer
+                      </Label>
                     </div>
                   </div>
                 ))}
