@@ -22,6 +22,13 @@ export const baseApi = createApi({
   endpoints: () => ({}),
   tagTypes: [
     "users",
+    "quiz",
+
+
+
+
+
+
     "wardens",
     "profile",
     "report",
@@ -32,6 +39,7 @@ export const baseApi = createApi({
     "leaders",
     "notifications",
     "group",
-    "admins"
+    "admins",
+    
   ],
 });
