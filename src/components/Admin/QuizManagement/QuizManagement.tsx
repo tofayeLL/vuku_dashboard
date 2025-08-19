@@ -3,10 +3,11 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { BookOpen, ChevronRight, Plus, Users } from "lucide-react";
-import React, { useState } from "react";
-import CreateQuizModal from "./CreateQuizModal";
+import React from "react";
+
 import { useGetAllQuizQuery } from "@/redux/api/quizApi";
 import { Loading } from "@/components/ui/loading";
+import Link from "next/link";
 
 interface QuizManagement {
   title: string;
@@ -16,7 +17,7 @@ interface QuizManagement {
 }
 
 const QuizManagement = () => {
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+ 
 
   const {data:allQuizzes, isLoading} = useGetAllQuizQuery({});
   console.log("quiz page",allQuizzes?.result);
@@ -71,9 +72,10 @@ const QuizManagement = () => {
 
       {/* for create quiz */}
       <div className="mt-6">
+      <Link href={"/admin/quiz_Management/createQuiz"}>
         <Card
           className="w-full max-w-sm cursor-pointer transition-all duration-200 hover:shadow-md hover:scale-[1.02] border-dashed border-2 border-muted-foreground/20 bg-muted/10"
-          onClick={() => setIsCreateModalOpen(true)}
+          
         >
           <CardContent className="flex flex-col items-center justify-center p-8 text-center">
             <div className="mb-6 ">
@@ -86,11 +88,9 @@ const QuizManagement = () => {
           </CardContent>
         </Card>
 
-        {/* Modal Component */}
-        <CreateQuizModal
-          isOpen={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-        />
+      </Link>
+
+       
       </div>
     </div>
   );
