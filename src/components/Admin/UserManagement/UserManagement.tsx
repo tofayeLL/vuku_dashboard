@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState } from "react";
 
@@ -13,7 +14,7 @@ import {
 import { Filter, Search } from "lucide-react";
 
 import Image from "next/image";
-import userImage from "@/assets/User.png";
+// import userImage from "@/assets/User.png";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -39,13 +40,17 @@ import Pagination from "@/components/ui/pagination";
 } */
 
 const UserManagementAdmin = () => {
-      const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const limit = 10;
+  const limit = 2;
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  const {data:getAllUser} = useGetAllUsersQuery({page:currentPage, limit:limit});
-  console.log("userManagement",getAllUser);
+  const { data: getAllUser } = useGetAllUsersQuery({
+    page: currentPage,
+    limit: limit,
+  });
+  console.log("userManagement", getAllUser);
+  console.log("userManagement2", getAllUser?.result?.users);
 
   const handleCategoryChange = (value: string) => {
     setSelectedCategory(value);
@@ -94,7 +99,6 @@ const UserManagementAdmin = () => {
             <Table className="">
               <TableHeader className="bg-[#F8FAFC]">
                 <TableRow className="border-b">
-                  
                   <TableHead className=" text-base font-semibold">
                     Name
                   </TableHead>
@@ -102,65 +106,63 @@ const UserManagementAdmin = () => {
                     Category
                   </TableHead>
                   <TableHead className=" text-base font-semibold">
-                   Email
+                    Email
                   </TableHead>
                   <TableHead className=" text-base font-semibold">
                     Continue Reading
                   </TableHead>
-                
+
                   <TableHead className=" text-base font-semibold">
                     Action
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow className="border-b last:border-b-0">
-                  
-                  <TableCell className="font-medium text-gray-700 py-3 flex justify-start items-center gap-2">
-                    <span>
-                      <Image
-                        src={userImage}
-                        alt="image"
-                        width={40}
-                        height={40}
-                        className="rounded-sm object-cover w-10 h-10"
-                      />
-                    </span>{" "}
-                    Mia Johnson
-                  </TableCell>
-                  <TableCell className="text-gray-700 py-3">
-                    Beginner
-                  </TableCell>
-                  <TableCell className="py-3">shamim03@gmail.com</TableCell>
-                  <TableCell className="py-3">25%</TableCell>
-                 
-                   
-                   <TableCell className="text-gray-700 py-3 space-x-3 ">
-                    <Button
-                    
-                      variant="outline"
-                      className=" bg-yellow-50 w-[40%] text-[#FAAD14]  hover:bg-[#fcab091a] hover:text-[#dd9505]  px-4 py-2 rounded-sm font-medium transition-colors cursor-pointer"
-                    >
-                      View User
-                    </Button>
-
-
-                    <Button
-                      variant="outline"
-                      className="bg-red-50 w-[40%] text-red-600  hover:bg-red-100 hover:text-red-700  px-4 py-2 rounded-sm font-medium transition-colors cursor-pointer"
-                    >
-                      Delete User
-                    </Button>
-                  </TableCell>
-                   
-                   
-                </TableRow>
+                {getAllUser?.result?.users?.map((item: any) => (
+                  <TableRow key={item?.id} className="border-b last:border-b-0">
+                    <TableCell className="font-medium text-gray-700 py-3 flex justify-start items-center gap-2">
+                      <span>
+                        <Image
+                          src={item?.profileImage || "not found"}
+                          alt="image"
+                          width={40}
+                          height={40}
+                          className="rounded-sm object-cover w-10 h-10"
+                        />
+                      </span>
+                      {item?.fullName || "not found"}
+                    </TableCell>
+                    <TableCell className="text-gray-700 py-3">
+                      {item?.readLevel || "not found"}
+                    </TableCell>
+                    <TableCell className="py-3">
+                      {item?.email || "not found"}
+                    </TableCell>
+                    <TableCell className="py-3">
+                      {item?.points || "not found"}
+                    </TableCell>
+                    <TableCell className="text-gray-700 py-3 space-x-3">
+                      <Button
+                        variant="outline"
+                        className=" bg-yellow-50 w-[40%] text-[#FAAD14] hover:bg-[#fcab091a] hover:text-[#dd9505] px-4 py-2 rounded-sm font-medium transition-colors cursor-pointer"
+                      >
+                        View User
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className=" bg-red-50 w-[40%] text-red-600 hover:bg-red-100 hover:text-red-700 px-4 py-2 rounded-sm font-medium transition-colors cursor-pointer"
+                      >
+                        Delete User
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </div>
         </div>
       </div>
-        {/* pagination */}
+      {/* pagination */}
       <div className="flex justify-center items-center mt-14">
         <Pagination
           totalPage={getAllUser?.result?.totalPages || 1}

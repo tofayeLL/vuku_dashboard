@@ -19,7 +19,7 @@ const Pagination = ({ totalPage, setCurrentPage, currentPage }: PaginationProps)
           size="icon"
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
-          className="h-8 w-8 bg-[#54BB52] text-[#54BB52]"
+          className="h-8 w-8 bg-[#68c0671a] text-[#54BB52]"
         >
           <ChevronLeft className="h-5 w-5" />
         </Button>
@@ -43,7 +43,7 @@ const Pagination = ({ totalPage, setCurrentPage, currentPage }: PaginationProps)
                 variant={currentPage === page ? "default" : "ghost"}
                 size="icon"
                 onClick={() => setCurrentPage(page)}
-                className={`h-8 w-8 rounded-md hover:bg-[#54BB52] hover:text-[#54BB52] ${currentPage === page
+                className={`h-8 w-8 rounded-md hover:bg-[#54BB52] hover:text-white ${currentPage === page
                   ? "bg-[#54BB52] text-white"
                   : ""
                   }`}
@@ -58,9 +58,9 @@ const Pagination = ({ totalPage, setCurrentPage, currentPage }: PaginationProps)
           size="icon"
           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPage))}
           disabled={currentPage === totalPage}
-          className="h-8 w-8 bg-[#1ca019] text-[#54BB52]"
+          className="h-8 w-8 bg-[#f0faf0]    "
         >
-          <ChevronRight className="h-5 w-5" />
+          <ChevronRight className="h-10 w-10 text-[#54ba52]" />
         </Button>
       </div>
     </div>
