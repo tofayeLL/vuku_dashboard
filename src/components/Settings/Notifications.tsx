@@ -14,9 +14,9 @@ interface NotificationSettings {
 
 const Notifications = () => {
     const [notifications, setNotifications] = useState<NotificationSettings>({
-        productUpdates: true,
+        productUpdates: false,
         comments: false,
-        checkoutProduct: true,
+        checkoutProduct: false,
     })
 
     const handleNotificationChange = (key: keyof NotificationSettings, value: boolean) => {

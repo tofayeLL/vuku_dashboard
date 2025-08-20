@@ -28,8 +28,8 @@ const DashboardLayout = () => {
 
 
       <div>
-        <div className="  grid lg:grid-cols-3 gap-6">
-          <div className="col-span-3">
+        <div className="  grid lg:grid-cols-3 grid-cols-1 gap-6">
+          <div className="lg:col-span-3 ">
            <TotalUserTable></TotalUserTable>
           </div>
          {/*  <div className="col-span-1">
