@@ -157,7 +157,7 @@ export function ImageUploader() {
 
             <div className="flex gap-2">
               {!!files.length && !uploadedUrls.length && (
-                <Button onClick={handleUpload} disabled={isLoading} className="flex-1 text-white">
+                <Button onClick={handleUpload} disabled={isLoading} className="flex-1 text-white bg-[#54BB52] hover:bg-[#54BB52]">
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
