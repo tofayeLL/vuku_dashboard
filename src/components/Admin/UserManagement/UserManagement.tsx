@@ -26,6 +26,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useGetAllUsersQuery } from "@/redux/api/userApi";
 import Pagination from "@/components/ui/pagination";
+import { Loading } from "@/components/ui/loading";
 
 /* interface ActivityData {
   id: string;
@@ -42,10 +43,10 @@ import Pagination from "@/components/ui/pagination";
 const UserManagementAdmin = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const limit = 2;
+  const limit = 4;
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  const { data: getAllUser } = useGetAllUsersQuery({
+  const { data: getAllUser, isLoading } = useGetAllUsersQuery({
     page: currentPage,
     limit: limit,
   });
@@ -56,6 +57,15 @@ const UserManagementAdmin = () => {
     setSelectedCategory(value);
     // Add filtering logic here based on your needs
   };
+    if (isLoading) {
+      return (
+        <div className="flex items-center justify-center min-h-[70vh] bg-white">
+          <div className="flex items-center justify-center space-x-2">
+            <Loading></Loading>
+          </div>
+        </div>
+      );
+    }
 
   return (
     <section>
@@ -163,7 +173,7 @@ const UserManagementAdmin = () => {
         </div>
       </div>
       {/* pagination */}
-      <div className="flex justify-center items-center mt-14">
+      <div className="flex justify-end items-center mt-14">
         <Pagination
           totalPage={getAllUser?.result?.totalPages || 1}
           setCurrentPage={setCurrentPage}

@@ -39,6 +39,7 @@ const AccountSection = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<ChangePasswordFormData>({
     resolver: zodResolver(changePasswordSchema),
     mode: "onSubmit",
@@ -59,6 +60,14 @@ const AccountSection = () => {
         console.log("change password", response);
         if (response?.data?.success) {
           toast.success(response?.data?.message);
+          
+          // Reset form after successful password change
+          reset();
+          
+          // Also reset password visibility states
+          setShowOldPassword(false);
+          setShowNewPassword(false);
+          setShowConfirmPassword(false);
         } else if (response?.error) {
           if ("data" in response.error && response.error.data) {
             toast.error(

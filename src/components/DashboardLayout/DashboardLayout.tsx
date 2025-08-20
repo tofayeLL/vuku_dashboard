@@ -6,7 +6,7 @@ import DashboardStat from "./DashboardStat";
 import PaymentReportChart from "./PaymentReportChart";
 import DashboardNewUsers from "./DashboardNewUsers";
 import TotalUserTable from "./TotalUserTable";
-import { BookList } from "./BookList";
+/* import { BookList } from "./BookList"; */
 
 const DashboardLayout = () => {
   return (
@@ -15,7 +15,7 @@ const DashboardLayout = () => {
       <DashboardStat />
       
       <div>
-        <div className="  grid grid-cols-3 gap-6">
+        <div className="  grid lg:grid-cols-3 grid-cols-1 gap-6">
           <div className="col-span-2">
             <PaymentReportChart></PaymentReportChart>
           </div>
@@ -28,13 +28,13 @@ const DashboardLayout = () => {
 
 
       <div>
-        <div className="  grid grid-cols-3 gap-6">
-          <div className="col-span-2">
+        <div className="  grid lg:grid-cols-3 gap-6">
+          <div className="col-span-3">
            <TotalUserTable></TotalUserTable>
           </div>
-          <div className="col-span-1">
+         {/*  <div className="col-span-1">
             <BookList></BookList>
-          </div>
+          </div> */}
         </div>    
       </div>
 

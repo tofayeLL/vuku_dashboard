@@ -1,15 +1,18 @@
 "use client";
 
-import { useGetAllAdminAnalysisQuery } from "@/redux/api/adminApi";
 import React from "react";
 import { Loading } from "../ui/loading";
 import Image from "next/image";
 import icon from "@/assets/icon.png";
+import icon2 from "@/assets/icons/DashboardHome/totalActive.png";
+import icon3 from "@/assets/icons/DashboardHome/totalEarnings.png";
+// import icon from "@/assets/icon.png";
+import { useGetAllAdminStatsQuery } from "@/redux/api/adminApi";
 
 const DashboardStat = () => {
-  const { data: allStatsData, isLoading } = useGetAllAdminAnalysisQuery({});
+  const { data: allStatsData, isLoading } = useGetAllAdminStatsQuery({});
 
-  console.log("...", allStatsData);
+  console.log("admin overview", allStatsData);
 
   if (isLoading) {
     return (
@@ -22,13 +25,13 @@ const DashboardStat = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {/* Card 1 */}
       <div className="bg-white rounded-xl shadow py-16 flex px-10 justify-between">
         <div className="  ">
-          <h1 className="font-medium text-lg text-gray-600">Total Reports</h1>
+          <h1 className="font-medium text-lg text-gray-600">Total Users</h1>
           <p className="text-3xl font-bold text-gray-900 mt-3">
-            {allStatsData?.result?.issueReports}
+            {allStatsData?.result?.totalUsers}
           </p>
         </div>
 
@@ -44,19 +47,19 @@ const DashboardStat = () => {
           />
         </div>
       </div>
-      {/* Card 1 */}
+      {/* Card 2 */}
       <div className="bg-white rounded-xl shadow py-16 flex px-10 justify-between">
         <div className="  ">
-          <h1 className="font-medium text-lg text-gray-600">Total Reports</h1>
+          <h1 className="font-medium text-lg text-gray-600">Total Active</h1>
           <p className="text-3xl font-bold text-gray-900 mt-3">
-            {allStatsData?.result?.issueReports}
+            {allStatsData?.result?.activeUsers}
           </p>
         </div>
 
         {/* card right */}
         <div className="p-2.5 rounded-full  flex items-center justify-center shrink-0">
           <Image
-            src={icon}
+            src={icon2}
             alt="Clock icon"
             width={56}
             height={56}
@@ -65,40 +68,20 @@ const DashboardStat = () => {
           />
         </div>
       </div>
-      {/* Card 1 */}
+    
+      {/* Card 4 */}
       <div className="bg-white rounded-xl shadow py-16 flex px-10 justify-between">
         <div className="  ">
-          <h1 className="font-medium text-lg text-gray-600">Total Reports</h1>
+          <h1 className="font-medium text-lg text-gray-600">Total Earnings</h1>
           <p className="text-3xl font-bold text-gray-900 mt-3">
-            {allStatsData?.result?.issueReports}
+            {allStatsData?.result?.totalEarnings}
           </p>
         </div>
 
         {/* card right */}
         <div className="p-2.5 rounded-full  flex items-center justify-center shrink-0">
           <Image
-            src={icon}
-            alt="Clock icon"
-            width={56}
-            height={56}
-            unoptimized
-            className="object-cover object-center"
-          />
-        </div>
-      </div>
-      {/* Card 1 */}
-      <div className="bg-white rounded-xl shadow py-16 flex px-10 justify-between">
-        <div className="  ">
-          <h1 className="font-medium text-lg text-gray-600">Total Reports</h1>
-          <p className="text-3xl font-bold text-gray-900 mt-3">
-            {allStatsData?.result?.issueReports}
-          </p>
-        </div>
-
-        {/* card right */}
-        <div className="p-2.5 rounded-full  flex items-center justify-center shrink-0">
-          <Image
-            src={icon}
+            src={icon3}
             alt="Clock icon"
             width={56}
             height={56}

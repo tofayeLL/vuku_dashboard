@@ -53,11 +53,11 @@ const NavbarSlider = ({ isOpen, toggleSidebar }: SidebarProps) => {
       route: "/admin/quiz_Management",
       iconPath: <BsPeople className="h-5 w-5" />,
     },
-       {
+     /*   {
       label: "Subscription Plan",
       route: "/admin/subscription_Plan",
       iconPath: <BsPeople className="h-5 w-5" />,
-    },
+    }, */
     
 
     /*   {

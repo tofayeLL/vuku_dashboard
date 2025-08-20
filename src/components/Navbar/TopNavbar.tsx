@@ -15,6 +15,7 @@ import { formatChatDate } from "@/lib/formateTimeStamp";
 
 import userImage from "@/assets/images/userImage.jpg";
 import { useGetSingleUserQuery } from "@/redux/api/userApi";
+import { Loading } from "../ui/loading";
 /* import { useSelector } from "react-redux";
 import { useAuth } from "@/redux/features/authSlice"; */
 
@@ -37,7 +38,7 @@ type UpdateNotificationPayload = {
 };
 
 const TopNavbar = () => {
-  const {data: userProfile} = useGetSingleUserQuery({});
+  const {data: userProfile, isLoading} = useGetSingleUserQuery({});
   const { data: notificationsData, refetch } = useGetMyNotificationsQuery({});
   const [updateNotification] = useUpdateNotificationMutation();
 
@@ -63,6 +64,17 @@ const TopNavbar = () => {
       AntMessage.error("Failed to mark as read");
     }
   };
+
+  
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[70vh] bg-white">
+        <div className="flex items-center justify-center space-x-2">
+          <Loading></Loading>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

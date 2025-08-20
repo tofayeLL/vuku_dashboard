@@ -1,110 +1,90 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { ChevronDown, MoveUp } from "lucide-react";
+import { useGetNewUserQuery } from "@/redux/api/adminApi";
+import { Loading } from "../ui/loading";
+
+interface TabConfig {
+  label: string;
+  value: string;
+}
+
+const TAB_CONFIGS: TabConfig[] = [
+  { label: "Daily", value: "today" },
+  { label: "Weekly", value: "weekly" },
+  { label: "Monthly", value: "monthly" },
+];
+
+const VISIBLE_USERS_LIMIT = 6;
 
 export default function DashboardNewUsers() {
-  const [activeTab, setActiveTab] = useState("Daily");
+  const [activeTab, setActiveTab] = useState("today");
   const [expanded, setExpanded] = useState(false);
 
-  const tabs = ["Daily", "Weekly", "Monthly"];
-  const users = [
-    {
-      id: 1,
-      name: "John Doe",
-      avatar:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face&auto=format",
-      joined: "2 hours ago",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      avatar:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop&crop=face&auto=format",
-      joined: "1 hour ago",
-    },
-    {
-      id: 3,
-      name: "Mike Johnson",
-      avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face&auto=format",
-      joined: "45 minutes ago",
-    },
-    {
-      id: 4,
-      name: "Sarah Wilson",
-      avatar:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face&auto=format",
-      joined: "30 minutes ago",
-    },
-    {
-      id: 5,
-      name: "David Brown",
-      avatar:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face&auto=format",
-      joined: "25 minutes ago",
-    },
-    {
-      id: 6,
-      name: "Lisa Davis",
-      avatar:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=40&h=40&fit=crop&crop=face&auto=format",
-      joined: "15 minutes ago",
-    },
-    {
-      id: 7,
-      name: "Tom Miller",
-      avatar:
-        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=40&h=40&fit=crop&crop=face&auto=format",
-      joined: "10 minutes ago",
-    },
-    {
-      id: 8,
-      name: "Emma Wilson",
-      avatar:
-        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=40&h=40&fit=crop&crop=face&auto=format",
-      joined: "Just now",
-    },
-  ];
+  const { data: allStatsData, isLoading } = useGetNewUserQuery({
+    filter: activeTab,
+  });
 
-  const visibleUsers = expanded ? users : users.slice(0, 5);
-  const hiddenUsersCount = expanded ? 0 : Math.max(users.length - 5, 0);
+  const users = allStatsData?.result?.users || [];
+  const userCount = allStatsData?.result?.count || 0;
+  const hiddenUsersCount = expanded 
+    ? 0 
+    : Math.max(users.length - VISIBLE_USERS_LIMIT, 0);
+
+  
+    if (isLoading) {
+      return (
+        <div className="flex items-center justify-center min-h-[70vh] bg-white">
+          <div className="flex items-center justify-center space-x-2">
+            <Loading></Loading>
+          </div>
+        </div>
+      );
+    }
 
   return (
-    <div className="bg-white p-6 rounded-2xl flex flex-col shadow-xs ">
-      {/* New Users Today Card */}
-      <div className="mb-6 ">
-        <CardHeader className="flex flex-row justify-between items-center p-0 mb-4">
+    <div className="bg-white p-4 sm:p-6 rounded-2xl flex flex-col shadow-xs h-full">
+      {/* Header Section */}
+      <div className="mb-6">
+        <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-0 mb-4 gap-3 sm:gap-0">
           <CardTitle className="text-sm font-medium text-gray-500">
-            New Users Today
+            New Users
           </CardTitle>
-          <div className="flex space-x-1  p-1 rounded-lg">
-            {tabs.map((tab) => (
+          
+          {/* Tab Navigation */}
+          <div className="flex bg-gray-50 p-1 rounded-lg w-full sm:w-auto">
+            {TAB_CONFIGS.map((tab) => (
               <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-3 py-1 text-xs font-medium bg-white rounded-md transition-colors ${
-                  activeTab === tab
-                    ? " " /* "bg-white text-gray-900 shadow-sm" */
-                    : "text-gray-500 hover:text-gray-700"
+                key={tab.value}
+                onClick={() => setActiveTab(tab.value)}
+                className={`flex-1 sm:flex-none px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 ${
+                  activeTab === tab.value
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
                 }`}
               >
-                {tab}
+                {tab.label}
               </button>
             ))}
           </div>
         </CardHeader>
+
+        {/* Stats Display */}
         <CardContent className="p-0">
           <div className="flex items-end justify-between">
             <div>
-              <div className="text-3xl font-bold text-gray-900">150</div>
-              <div className="flex items-center mt-1">
-                <Badge className="text-xs bg-white text-gray-800 border border-gray-200 rounded-full py-1 font-medium">
-                  <MoveUp className="h-5 w-5 text-[#54BB52] " />
-                  10% today
+              <div className="text-2xl sm:text-3xl font-bold text-gray-900">
+                {userCount.toLocaleString()}
+              </div>
+              <div className="flex items-center mt-2">
+                <Badge className="text-xs bg-white text-gray-800 border border-gray-200 rounded-full py-1 px-2 font-medium">
+                  <MoveUp className="h-3 w-3 sm:h-4 sm:w-4 text-[#54BB52] mr-1" />
+                  10% increase
                 </Badge>
               </div>
             </div>
@@ -112,61 +92,63 @@ export default function DashboardNewUsers() {
         </CardContent>
       </div>
 
-      {/* Join Today Card */}
-      <div className="mt-44">
-        {" "}
-        {/* Changed from mt-50 (invalid value) to mt-12 */}
-        <div className="pb-3">
-          <h1 className="text-sm font-medium text-gray-900">Join Today</h1>
+      {/* Users Section */}
+      <div className="flex-1 flex flex-col justify-end">
+        <div className="py-2">
+          <h2 className="text-sm font-medium text-gray-900">Join Today</h2>
         </div>
-        <div className="space-y-4">
-          <div className="flex items-center -space-x-4">
-            {" "}
-            {/* Increased negative space */}
-            {visibleUsers.map((user) => (
-              <div key={user.id} className="relative">
-                <Avatar className="h-16 w-16 border-4 border-white hover:z-10 transition-all hover:scale-110">
-                  <AvatarImage
-                    src={`${
-                      user.avatar.split("?")[0]
-                    }?w=128&h=128&fit=crop&crop=faces&auto=format&q=80`}
-                    alt={user.name}
-                    className="object-cover"
-                  />
-                  <AvatarFallback className="text-sm font-medium bg-gray-100">
-                    {user.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-[10px] px-1 py-0.5 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
-                  {user.name}
-                </span>
-              </div>
-            ))}
-            {hiddenUsersCount > 0 && (
-              <div className="relative">
-                <span className="bg-[#54BB52] text-white rounded-full h-16 w-16 flex items-center justify-center text-sm font-medium border-4 border-white">
-                  +{hiddenUsersCount}
-                </span>
-              </div>
+        
+        {users.length > 0 ? (
+          <div className="space-y-4">
+            {/* Avatar Stack */}
+            <div className="flex items-center -space-x-2 sm:-space-x-3 flex-wrap">
+              {(expanded ? users : users.slice(0, VISIBLE_USERS_LIMIT)).map((user: any, index: number) => (
+                <div key={user.id} className="relative group">
+                  <Avatar className="h-12 w-12 sm:h-16 sm:w-16 border-2 sm:border-4 border-white hover:z-10 transition-all hover:scale-110 cursor-pointer">
+                    <AvatarImage
+                      src={`${user?.profileImage?.split("?")[0]}?w=128&h=128&fit=crop&crop=faces&auto=format&q=80`}
+                      alt={user.name || `User ${index + 1}`}
+                      className="object-cover"
+                    />
+                  </Avatar>
+                  
+                  {/* Tooltip */}
+                  <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-[10px] px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-20 pointer-events-none">
+                    {user.name || `User ${index + 1}`}
+                  </div>
+                </div>
+              ))}
+              
+              {/* Hidden users counter */}
+              {hiddenUsersCount > 0 && (
+                <div className="relative">
+                  <div className="bg-[#54BB52] text-white rounded-full h-12 w-12 sm:h-16 sm:w-16 flex items-center justify-center text-xs sm:text-sm font-medium border-2 sm:border-4 border-white">
+                    +{hiddenUsersCount}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Show more/less button */}
+            {users.length > VISIBLE_USERS_LIMIT && (
+              <button
+                onClick={() => setExpanded(!expanded)}
+                className="flex items-center text-xs text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                {expanded ? "Show less" : `Show ${hiddenUsersCount} more`}
+                <ChevronDown
+                  className={`h-4 w-4 ml-1 transition-transform duration-200 ${
+                    expanded ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
             )}
           </div>
-          {users.length > 5 && (
-            <button
-              onClick={() => setExpanded(!expanded)}
-              className="flex items-center text-xs text-gray-500 hover:text-gray-700"
-            >
-              {expanded ? "Show less" : "Show more"}
-              <ChevronDown
-                className={`h-4 w-4 ml-1 transition-transform ${
-                  expanded ? "rotate-180" : ""
-                }`}
-              />
-            </button>
-          )}
-        </div>
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-gray-500 text-sm">No new users found</p>
+          </div>
+        )}
       </div>
     </div>
   );

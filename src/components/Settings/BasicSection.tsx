@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { ImageUploader } from "../ui/ImageUploader";
 import userImage from "@/assets/images/userImage.jpg";
 import { useGetSingleUserQuery } from "@/redux/api/userApi";
+import { Loading } from "../ui/loading";
 
 interface ProfileData {
   fullName: string;
@@ -26,7 +27,7 @@ interface ProfileData {
 
 const BasicSection = () => {
   const [active, setActive] = useState(false);
-  const { data: userProfile } = useGetSingleUserQuery({});
+  const { data: userProfile, isLoading: isProfileImageLoading } = useGetSingleUserQuery({});
 
   const [profile, setProfile] = useState<ProfileData>({
     fullName: "",
@@ -77,7 +78,15 @@ const BasicSection = () => {
     }
   };
 
-  if (isProfileLoading) return <div>Loading profile...</div>;
+   if (isLoading || isProfileLoading || isProfileImageLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[70vh] bg-white">
+        <div className="flex items-center justify-center space-x-2">
+          <Loading></Loading>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="">
