@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { IoClose /* IoLocationSharp */ } from "react-icons/io5";
+import { IoBriefcaseOutline, IoClose /* IoLocationSharp */ } from "react-icons/io5";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { FiMenu } from "react-icons/fi";
 import Cookies from "js-cookie";
@@ -15,7 +15,8 @@ import { logout } from "@/redux/features/authSlice";
 // import { CiUser } from "react-icons/ci";
 import { IoSettingsOutline } from "react-icons/io5";
 // import { PiBookOpenFill } from "react-icons/pi";
-import { BsPeople } from "react-icons/bs";
+
+import { FaUsers } from "react-icons/fa";
 
 
 // Sidebar Props
@@ -46,12 +47,12 @@ const NavbarSlider = ({ isOpen, toggleSidebar }: SidebarProps) => {
        {
       label: "User Management",
       route: "/admin/user_Management",
-      iconPath: <BsPeople className="h-5 w-5" />,
+      iconPath: <FaUsers  className="h-5 w-5" />,
     },
        {
       label: "Quiz Management",
       route: "/admin/quiz_Management",
-      iconPath: <BsPeople className="h-5 w-5" />,
+      iconPath: <IoBriefcaseOutline  className="h-5 w-5" />,
     },
      /*   {
       label: "Subscription Plan",
