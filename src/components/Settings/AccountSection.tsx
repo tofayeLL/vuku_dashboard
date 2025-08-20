@@ -7,7 +7,7 @@ import { Card, CardContent } from "../ui/card";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useResetPasswordMutation } from "@/redux/api/authApi";
+import { useChangePasswordMutation } from "@/redux/api/authApi";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
@@ -33,7 +33,7 @@ const AccountSection = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [resetPassword, { isLoading }] = useResetPasswordMutation();
+  const [changePassword, { isLoading }] = useChangePasswordMutation();
 
   const {
     register,
@@ -55,7 +55,8 @@ const AccountSection = () => {
           newPassword: data?.newPassword,
         };
 
-        const response = await resetPassword({ body });
+        const response = await changePassword({ body });
+        console.log("change password", response);
         if (response?.data?.success) {
           toast.success(response?.data?.message);
         } else if (response?.error) {
