@@ -140,7 +140,65 @@
   border-radius: 100px !important;
   padding-left: 10px;
   padding-right: 10px;
+  background: #fff;
+  border: #ffff;
   
+}
+.MuiInputBase-input{
+  background: #FFFF;
+  
+}
+.MuiInputBase-root {
+  border-radius: 100px !important;
+  padding-left: 10px;
+  padding-right: 10px;
+  background: #fff !important;
+  border: #ffff;
+}
+
+.MuiInputBase-input {
+  background: #FFFF !important;
+}
+
+/* Fix autofill background */
+.MuiInputBase-input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: inherit !important;
+  background-color: white !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+.MuiInputBase-input:-webkit-autofill:hover {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: inherit !important;
+  background-color: white !important;
+}
+
+.MuiInputBase-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: inherit !important;
+  background-color: white !important;
+}
+
+.MuiInputBase-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: inherit !important;
+  background-color: white !important;
+}
+
+/* Focus border color */
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #54BB52 !important;
+}
+
+/* Hover border color */
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #54BB52 !important;
+}
+
+/* Optional: Focus label color */
+.MuiInputLabel-root.Mui-focused {
+  color: #54BB52 !important;
 }
 
 /* .bg-black\/50 {

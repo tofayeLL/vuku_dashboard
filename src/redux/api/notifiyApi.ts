@@ -2,9 +2,9 @@ import { baseApi } from "./baseApi";
 
 export const notifyApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getMyNotifications: builder.query({
+    getAdminNotifications: builder.query({
       query: () => ({
-        url: `/notifications`,
+        url: `/notifications/admin-notifications`,
         method: "GET",
       }),
       providesTags: ["notifications"],
@@ -17,10 +17,10 @@ export const notifyApi = baseApi.injectEndpoints({
       invalidatesTags: ["notifications"],
     }),
     updateNotification: builder.mutation({
-      query: ({ id, data }) => ({
+      query: ( id ) => ({
         url: `/notifications/${id}`,
         method: "PATCH",
-        body: data,
+        
       }),
       invalidatesTags: ["notifications"],
     }),
@@ -28,7 +28,7 @@ export const notifyApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useGetMyNotificationsQuery,
+  useGetAdminNotificationsQuery,
   useDeleteNotificationMutation,
   useUpdateNotificationMutation,
 } = notifyApi;

@@ -18,7 +18,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 
 import { FaUsers } from "react-icons/fa";
 
-
+                               
 // Sidebar Props
 interface SidebarProps {
   isOpen: boolean;
@@ -171,7 +171,7 @@ const NavbarSlider = ({ isOpen, toggleSidebar }: SidebarProps) => {
         </div>
       </aside>
 
-      {/* Modal */}
+     
     </div>
   );
 };

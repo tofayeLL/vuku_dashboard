@@ -6,6 +6,7 @@ import BasicSection from "./BasicSection"
 // import Notifications from "./Notifications"
 import AccountSection from "./AccountSection"
 import { TooltipProvider } from "../ui/tooltip"
+import Notifications from "./Notification";
 // import Notifications from "./Notifications";
 
 type SettingsSection = "basic" | "account" | "notifications"
@@ -16,7 +17,7 @@ export default function Settings() {
     const sidebarItems = [
         { id: "basic" as const, label: "Basic" },
         { id: "account" as const, label: "Account" },
-        // { id: "notifications" as const, label: "Notifications" },
+        { id: "notifications" as const, label: "Notifications" },
     ]
 
     return (
@@ -52,9 +53,9 @@ export default function Settings() {
                         <AccountSection />
                     )}
                     {/* Notifications Section */}
-                    {/* {activeSection === "notifications" && (
-                        <Notifications />
-                    )} */}
+                    {activeSection === "notifications" && (
+                        <Notifications></Notifications>
+                    )}
                 </div>
             </div>
         </TooltipProvider>

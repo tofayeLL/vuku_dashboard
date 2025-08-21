@@ -2,13 +2,14 @@
 
 import React, { useState } from "react";
 import {  Modal, message as AntMessage } from "antd";
-// import { IoMdNotificationsOutline } from "react-icons/io";
+import { IoMdNotificationsOutline } from "react-icons/io";
 
 // import { LuMessageCircleMore } from "react-icons/lu";
 import Image from "next/image";
 // import { useGetMyProfileQuery } from "@/redux/api/settingsApi";
 import {
-  useGetMyNotificationsQuery,
+
+  useGetAdminNotificationsQuery,
   useUpdateNotificationMutation,
 } from "@/redux/api/notifiyApi";
 import { formatChatDate } from "@/lib/formateTimeStamp";
@@ -16,6 +17,8 @@ import { formatChatDate } from "@/lib/formateTimeStamp";
 import userImage from "@/assets/images/userImage.jpg";
 import { useGetSingleUserQuery } from "@/redux/api/userApi";
 import { Loading } from "../ui/loading";
+import { Badge } from "antd";
+import Link from "next/link";
 /* import { useSelector } from "react-redux";
 import { useAuth } from "@/redux/features/authSlice"; */
 
@@ -30,34 +33,32 @@ type NotificationType = {
   createdAt: string;
 };
 
-type UpdateNotificationPayload = {
+/* type UpdateNotificationPayload = {
   id: string;
-  data: {
-    isRead: boolean;
-  };
-};
+ 
+}; */
 
 const TopNavbar = () => {
   const {data: userProfile, isLoading} = useGetSingleUserQuery({});
-  const { data: notificationsData, refetch } = useGetMyNotificationsQuery({});
+  const { data: notificationsData, refetch } = useGetAdminNotificationsQuery({});
   const [updateNotification] = useUpdateNotificationMutation();
+  console.log("notifications", notificationsData?.result);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const notifications: NotificationType[] = notificationsData?.result || [];
+  console.log("update notification",notifications);
  /*  const authState = useSelector(useAuth)
   console.log("to navbar",authState);
   console.log("to navbar",authState?.adminInfo?.profileImage); */
 
-  // const unreadCount = notifications.filter((n) => !n.isRead).length;
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
   console.log("top navbar", userProfile);
 
   const handleMarkAsRead = async (id: string) => {
-    const payload: UpdateNotificationPayload = {
-      id,
-      data: { isRead: true },
-    };
+    console.log("notif id",id);
+   
     try {
-      await updateNotification(payload).unwrap();
+      await updateNotification(id).unwrap();
       AntMessage.success("Marked as read");
       refetch();
     } catch {
@@ -81,7 +82,7 @@ const TopNavbar = () => {
       <div className="bg-white flex justify-between items-center gap-2 font-bold w-full h-[81px] px-4 md:px-6 py-4 sticky top-0 z-40  ">
         <h1 className="md:text-3xl flex justify-center items-center gap-5">Overview</h1>
 
-        <div className="flex justify-end items-center gap-6">
+        <div className="flex  gap-6">
             {/* message Icon */}
        {/*   <Link href="/message">
           <div
@@ -93,15 +94,17 @@ const TopNavbar = () => {
             </Badge>
           </div>
          </Link> */}
-          {/* Notification Icon */}
-        {/*   <div
+           {/* Notification Icon */}
+         <Link href={""}>
+          <div
             className="bg-white shadow rounded-full px-2 py-1 h-full cursor-pointer"
             onClick={() => setIsModalOpen(true)}
           >
             <Badge count={unreadCount} size="small">
               <IoMdNotificationsOutline className="w-6 h-6 text-gray-500" />
             </Badge>
-          </div> */}
+          </div>
+         </Link>
 
           {/* Profile */}
           <div >
@@ -126,11 +129,11 @@ const TopNavbar = () => {
         onCancel={() => setIsModalOpen(false)}
         footer={null}
       >
-        {notifications.length === 0 ? (
+        {notifications?.length === 0 ? (
           <p className="text-sm text-gray-500">No notifications found.</p>
         ) : (
           <ul className="space-y-4 max-h-[300px] overflow-y-auto">
-            {notifications.map((notif) => (
+            {notifications?.map((notif) => (
               <li
                 key={notif.id}
                 className={`border rounded-lg p-3 shadow-sm ${
@@ -159,7 +162,7 @@ const TopNavbar = () => {
 
                     {!notif.isRead && (
                       <button
-                        onClick={() => handleMarkAsRead(notif.id)}
+                        onClick={() => handleMarkAsRead(notif?.id)}
                         className="text-xs text-blue-500 hover:underline"
                       >
                         Mark as read

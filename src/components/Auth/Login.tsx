@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
 import preview from "@/assets/preview.png";
-
 import logo from "@/assets/logo.png";
 import logo2 from "@/assets/logo2.png";
 import TextField from "@mui/material/TextField";
@@ -296,7 +295,7 @@ const Login = () => {
                     autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="h-12  border  rounded-full focus:border-[#54BB52] focus:ring-[#54BB52] w-full bg-none mt-2 "
+                    className="h-12  border  rounded-full w-full bg-none mt-2 "
                     required
                   />
                   <button

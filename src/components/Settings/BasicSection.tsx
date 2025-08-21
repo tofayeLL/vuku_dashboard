@@ -36,6 +36,7 @@ const BasicSection = () => {
 
   const { data, isLoading: isProfileLoading } = useGetMyProfileQuery("");
   const [updateMyProfile, { isLoading }] = useUpdateMyProfileMutation();
+  
 
   // Initialize form with fetched data
   useEffect(() => {
