@@ -20,11 +20,20 @@ interface NotificationPermissionState {
   isRequesting: boolean;
 }
 
+// Frontend storage keys
+const NOTIFICATION_ENABLED_KEY = 'notificationsEnabled';
+
 const Notifications = () => {
   const [updateMyProfile] = useUpdateMyProfileMutation();
 
-  const [notificationEnabled, setNotificationEnabled] = useState(false);
+  const [notificationEnabled, setNotificationEnabled] = useState(() => {
+    // Initialize from localStorage on component mount
+    const saved = localStorage.getItem(NOTIFICATION_ENABLED_KEY);
+    return saved ? JSON.parse(saved) : false;
+  });
+  
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const [permissionState, setPermissionState] =
     useState<NotificationPermissionState>({
@@ -33,42 +42,75 @@ const Notifications = () => {
       isRequesting: false,
     });
 
+  // Save notification state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem(NOTIFICATION_ENABLED_KEY, JSON.stringify(notificationEnabled));
+  }, [notificationEnabled]);
+
   // Check notification permission and get token on component mount
   useEffect(() => {
-    checkNotificationPermission();
+    initializeNotificationPermission();
   }, []);
 
-  const checkNotificationPermission = async () => {
-    const currentPermission = Notification.permission;
-
-    if (currentPermission === "granted") {
-      try {
-        const token = await getToken(messaging as Messaging, {
-          vapidKey:
-            "BE2GwQzKBZKyQUNC-QLCNXQY1pg_WfnlHyltdlT6EFaxdRi1mbEzowoUQd9k2Xx3fUw-CVH-9_9Qpv3EuGUOYjs",
-        });
+  const initializeNotificationPermission = async () => {
+    try {
+      const currentPermission = Notification.permission;
+      
+      if (currentPermission === "granted") {
+        // If user has notifications enabled in localStorage and browser permission is granted,
+        // get the FCM token
+        if (notificationEnabled) {
+          try {
+            const token = await getToken(messaging as Messaging, {
+              vapidKey: "BE2GwQzKBZKyQUNC-QLCNXQY1pg_WfnlHyltdlT6EFaxdRi1mbEzowoUQd9k2Xx3fUw-CVH-9_9Qpv3EuGUOYjs",
+            });
+            
+            setPermissionState({
+              permission: "granted",
+              fcmToken: token,
+              isRequesting: false,
+            });
+            
+            console.log("FCM token obtained during initialization:", token);
+          } catch (error) {
+            console.error("Error getting FCM token during initialization:", error);
+            setPermissionState({
+              permission: "granted",
+              fcmToken: null,
+              isRequesting: false,
+            });
+          }
+        } else {
+          // User has disabled notifications, so don't get token
+          setPermissionState({
+            permission: "granted",
+            fcmToken: null,
+            isRequesting: false,
+          });
+        }
+      } else {
         setPermissionState({
-          permission: "granted",
-          fcmToken: token,
-          isRequesting: false,
-        });
-        setNotificationEnabled(true);
-      } catch (error) {
-        console.error("Error getting FCM token:", error);
-        setPermissionState({
-          permission: "granted",
+          permission: currentPermission,
           fcmToken: null,
           isRequesting: false,
         });
-        setNotificationEnabled(false);
+        
+        // If permission is denied but user had enabled notifications,
+        // reset the localStorage state
+        if (currentPermission === "denied" && notificationEnabled) {
+          setNotificationEnabled(false);
+        }
       }
-    } else {
-      setPermissionState({
-        permission: currentPermission,
-        fcmToken: null,
-        isRequesting: false,
+      
+      setIsInitialized(true);
+      console.log("Notification state initialized:", {
+        frontendEnabled: notificationEnabled,
+        browserPermission: currentPermission,
       });
-      setNotificationEnabled(false);
+      
+    } catch (error) {
+      console.error("Error initializing notification state:", error);
+      setIsInitialized(true);
     }
   };
 
@@ -153,11 +195,16 @@ const Notifications = () => {
 
         // Update API with FCM token
         await updateNotificationSettingsAPI(tokenToSend);
+        
+        // Update local state - this will automatically save to localStorage via useEffect
         setNotificationEnabled(true);
         toast.success("Notifications enabled successfully!");
+        
       } else {
         // User wants to disable notifications
         await updateNotificationSettingsAPI(null);
+        
+        // Update local state - this will automatically save to localStorage via useEffect
         setNotificationEnabled(false);
         toast.success("Notifications disabled successfully!");
 
@@ -177,7 +224,19 @@ const Notifications = () => {
     }
   };
 
-  const isToggleDisabled = isLoading || permissionState.isRequesting;
+  const isToggleDisabled = isLoading || permissionState.isRequesting || !isInitialized;
+
+  // Show loading state while initializing
+  if (!isInitialized) {
+    return (
+      <div className="p-6 rounded-lg">
+        <div className="flex items-center gap-2 border-b pb-6 mb-6">
+          <h1 className="text-lg font-medium text-[#30373D]">Notifications</h1>
+        </div>
+        <p className="text-sm text-gray-500">Loading notification settings...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 rounded-lg">
