@@ -54,30 +54,7 @@ const NavbarSlider = ({ isOpen, toggleSidebar }: SidebarProps) => {
       route: "/admin/quiz_Management",
       iconPath: <IoBriefcaseOutline  className="h-5 w-5" />,
     },
-     /*   {
-      label: "Subscription Plan",
-      route: "/admin/subscription_Plan",
-      iconPath: <BsPeople className="h-5 w-5" />,
-    }, */
-    
-
-    /*   {
-      label: "Location",
-      route: "/admin/locations",
-      iconPath: <IoLocationSharp className="h-5 w-5" />,
-    },
-
-    {
-      label: "Training",
-      route: "/admin/training",
-      iconPath: <PiBookOpenFill className="h-5 w-5" />,
-    },
-
-    {
-      label: "Support",
-      route: "/message",
-      iconPath: <LuMessageCircleMore className="h-5 w-5" />,
-    }, */
+   
     {
       label: "Settings",
       route: "/settings",

@@ -18,6 +18,7 @@ export const quizApi = baseApi.injectEndpoints({
       }),
       providesTags: ["quiz"],
     }),
+    
      createQuiz: builder.mutation({
       query: (formData) => ({
         url: `/quizz/create`,

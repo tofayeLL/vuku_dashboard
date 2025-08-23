@@ -12,7 +12,7 @@ import {
 
   useGetAdminNotificationsQuery,
   useUpdateNotificationMutation,
-  useDeleteNotificationMutation, // Add this import
+  useDeleteNotificationMutation, 
 } from "@/redux/api/notifiyApi";
 import { formatChatDate } from "@/lib/formateTimeStamp";
 
@@ -21,10 +21,7 @@ import { useGetSingleUserQuery } from "@/redux/api/userApi";
 import { Loading } from "../ui/loading";
 import { Badge } from "antd";
 import Link from "next/link";
-/* import { useSelector } from "react-redux";
-import { useAuth } from "@/redux/features/authSlice"; */
 
-// import Link from "next/link";
 
 
 type NotificationType = {
@@ -35,10 +32,7 @@ type NotificationType = {
   createdAt: string;
 };
 
-/* type UpdateNotificationPayload = {
-  id: string;
- 
-}; */
+
 
 const TopNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -126,17 +120,7 @@ const TopNavbar = () => {
         <h1 className="md:text-3xl flex justify-center items-center gap-5">Overview</h1>
 
         <div className="flex  gap-6">
-            {/* message Icon */}
-       {/*   <Link href="/message">
-          <div
-            className="bg-white shadow rounded-full px-2 py-1 h-full cursor-pointer"
-           
-          >
-            <Badge count={unreadCount} size="small">
-              <LuMessageCircleMore className="w-6 h-6 text-gray-500" />
-            </Badge>
-          </div>
-         </Link> */}
+       
            {/* Notification Icon */}
          <Link href={""}>
           <div

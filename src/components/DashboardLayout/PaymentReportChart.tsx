@@ -13,8 +13,8 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader,/* , CardTitle */ 
 CardTitle} from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { useState } from "react";
+/* import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { useState } from "react"; */
 /* import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react"; */
@@ -61,12 +61,12 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export default function CasesReportChart() {
-  const [selectedCategory, setSelectedCategory] = useState("Monthly");
+/*   const [selectedCategory, setSelectedCategory] = useState("Monthly");
 
   const handleCategoryChange = (value: string) => {
     setSelectedCategory(value);
     // Add filtering logic here based on your needs
-  };
+  }; */
 
   return (
     <Card className="w-full bg-[#FFF] flex flex-col justify-end item-end rounded-2xl">
@@ -79,7 +79,7 @@ export default function CasesReportChart() {
             <p className="bg-[#54BB52] h-4 w-4 rounded"></p>
             <h1>Payment</h1>
           </div>
-          <Select value={selectedCategory} onValueChange={handleCategoryChange}>
+         {/*  <Select value={selectedCategory} onValueChange={handleCategoryChange}>
             <SelectTrigger className="">
               <SelectValue placeholder="Monthly" />
             </SelectTrigger>
@@ -89,7 +89,7 @@ export default function CasesReportChart() {
               <SelectItem value="Weekly">Weekly</SelectItem>
               <SelectItem value="Yearly">Yearly</SelectItem>
             </SelectContent>
-          </Select>
+          </Select> */}
         </div>
       </CardHeader>
 

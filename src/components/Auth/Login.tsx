@@ -114,7 +114,7 @@ const Login = () => {
     setNotificationModalVisible(false);
     setFcmToken(null);
     setNotificationStatus('skipped');
-    toast.info("You can turn on from user profile after");
+    toast.info("You will not get notify for any notification");
   };
 
   const handleLogin = async (e: React.FormEvent) => {
